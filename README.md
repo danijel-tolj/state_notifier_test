@@ -11,6 +11,10 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
+## Package
+
+Package is a port of `felangel`'s `bloc_test`, modified to work with StateNotifier class
+
 ## Installation
 
 Add to dev dependencies inside pubspec_yaml:
