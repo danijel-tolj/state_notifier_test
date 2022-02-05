@@ -15,3 +15,9 @@
 ### Library changes
 
 #### Updated test dependency version to 1.20.1
+
+## 0.0.4
+
+### Library changes
+
+#### Reverted test dependency to 1.16.0
