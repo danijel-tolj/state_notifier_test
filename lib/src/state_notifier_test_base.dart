@@ -175,9 +175,10 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
 
   try {
     test.expect(states, test.wrapMatcher(expected));
+    // ignore: nullable_type_in_catch_clause
   } on test.TestFailure catch (e) {
     final diff = _diff(expected: expected, actionual: states);
-    final message = '${e.message}\n$diff';
+    final message = '${e?.message ?? 'errror'}\n$diff';
     // ignore: only_throw_errors
     throw test.TestFailure(message);
   }
