@@ -27,9 +27,6 @@ import 'package:state_notifier/state_notifier.dart';
 /// [skip] is an optional `int` which can be used to skip any number of states.
 /// [skip] defaults to 0.
 ///
-/// [wait] is an optional `Duration` which can be used to wait for
-/// async operations within the `stateNotifier` under test such as `debounceTime`.
-///
 /// [expect] is an optional `Function` that returns a `Matcher` which the `stateNotifier`
 /// under test is expected to emit after [action] is executed.
 ///
