@@ -25,9 +25,6 @@ start using the package.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
 ```dart
 stateNotifierTest(
   'CounterNotifier emits [10] when seeded with 9',
@@ -38,9 +35,9 @@ stateNotifierTest(
 );
 ```
 
-[stateNotifierTest] can also be used to [skip] any number of emitted states
+`stateNotifierTest` can also be used to `skip` any number of emitted states
 before asserting against the expected states.
-[skip] defaults to 0.
+`skip` defaults to 0.
 
 ```dart
 stateNotifierTest(
@@ -56,7 +53,7 @@ stateNotifierTest(
 );
 ```
 
-[stateNotifierTest] can also be used to [verify] internal stateNotifier functionality.
+`stateNotifierTest` can also be used to `verify` internal stateNotifier functionality.
 
 ```dart
 stateNotifierTest(
