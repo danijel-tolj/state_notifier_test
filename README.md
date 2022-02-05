@@ -29,8 +29,46 @@ TODO: Include short and useful examples for package users. Add longer examples
 to `/example` folder. 
 
 ```dart
-const like = 'sample';
+stateNotifierTest(
+  'CounterNotifier emits [10] when seeded with 9',
+  build: () => CounterNotifier(),
+  seed: () => 9,
+  action: (stateNotifier) => stateNotifier.increment(),
+  expect: () => [10],
+);
 ```
+
+[stateNotifierTest] can also be used to [skip] any number of emitted states
+before asserting against the expected states.
+[skip] defaults to 0.
+
+```dart
+stateNotifierTest(
+  'CounterNotifier emits [2] when increment is called twice',
+  build: () => CounterNotifier(),
+  action: (stateNotifier) {
+    stateNotifier
+      ..increment()
+      ..increment();
+  },
+  skip: 1,
+  expect: () => [2],
+);
+```
+
+[stateNotifierTest] can also be used to [verify] internal stateNotifier functionality.
+
+```dart
+stateNotifierTest(
+  'CounterNotifier emits [1] when increment is called',
+  build: () => CounterNotifier(),
+  action: (stateNotifier) => stateNotifier.increment(),
+  expect: () => [1],
+  verify: (_) {
+    verify(() => repository.someMethod(any())).called(1);
+  }
+);
+ ```
 
 ## Additional information
 

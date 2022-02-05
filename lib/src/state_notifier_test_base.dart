@@ -7,7 +7,7 @@ import 'package:state_notifier/state_notifier.dart';
 
 /// Creates a new `stateNotifier`-specific test case with the given [description].
 /// [stateNotifierTest] will handle asserting that the `stateNotifier` emits the [expect]ed
-/// states (in order) after [act] is executed.
+/// states (in order) after [action] is executed.
 /// [stateNotifierTest] also handles ensuring that no additional states are emitted
 /// by closing the `stateNotifier` stream before evaluating the [expect]ation.
 ///
@@ -19,10 +19,10 @@ import 'package:state_notifier/state_notifier.dart';
 /// [build] should construct and return the `stateNotifier` under test.
 ///
 /// [seed] is an optional `Function` that returns a state
-/// which will be used to seed the `stateNotifier` before [act] is called.
+/// which will be used to seed the `stateNotifier` before [action] is called.
 ///
-/// [act] is an optional callback which will be invoked with the `stateNotifier` under
-/// test and should be used to interact with the `stateNotifier`.
+/// [action] is an optional callback which will be invoked with the `stateNotifier` under
+/// test and should be used to interaction with the `stateNotifier`.
 ///
 /// [skip] is an optional `int` which can be used to skip any number of states.
 /// [skip] defaults to 0.
@@ -31,14 +31,14 @@ import 'package:state_notifier/state_notifier.dart';
 /// async operations within the `stateNotifier` under test such as `debounceTime`.
 ///
 /// [expect] is an optional `Function` that returns a `Matcher` which the `stateNotifier`
-/// under test is expected to emit after [act] is executed.
+/// under test is expected to emit after [action] is executed.
 ///
 /// [verify] is an optional callback which is invoked after [expect]
 /// and can be used for additional verification/assertions.
 /// [verify] is called with the `stateNotifier` returned by [build].
 ///
 /// [errors] is an optional `Function` that returns a `Matcher` which the `stateNotifier`
-/// under test is expected to throw after [act] is executed.
+/// under test is expected to throw after [action] is executed.
 ///
 /// [tearDown] is optional and can be used to
 /// execute any code after the test has run.
@@ -54,7 +54,7 @@ import 'package:state_notifier/state_notifier.dart';
 ///   'CounterNotifier emits [10] when seeded with 9',
 ///   build: () => CounterNotifier(),
 ///   seed: () => 9,
-///   act: (stateNotifier) => stateNotifier.increment(),
+///   action: (stateNotifier) => stateNotifier.increment(),
 ///   expect: () => [10],
 /// );
 /// ```
@@ -67,7 +67,7 @@ import 'package:state_notifier/state_notifier.dart';
 /// stateNotifierTest(
 ///   'CounterNotifier emits [2] when increment is called twice',
 ///   build: () => CounterNotifier(),
-///   act: (stateNotifier) {
+///   action: (stateNotifier) {
 ///     stateNotifier
 ///       ..increment()
 ///       ..increment();
@@ -83,7 +83,7 @@ import 'package:state_notifier/state_notifier.dart';
 /// stateNotifierTest(
 ///   'CounterNotifier emits [1] when increment is called',
 ///   build: () => CounterNotifier(),
-///   act: (stateNotifier) => stateNotifier.increment(),
+///   action: (stateNotifier) => stateNotifier.increment(),
 ///   expect: () => [1],
 ///   verify: (_) {
 ///     verify(() => repository.someMethod(any())).called(1);
@@ -99,14 +99,14 @@ import 'package:state_notifier/state_notifier.dart';
 /// stateNotifierTest(
 ///  'emits [StateB] when EventB is called',
 ///  build: () => MyBloc(),
-///  act: (stateNotifier) => stateNotifier.add(EventB()),
+///  action: (stateNotifier) => stateNotifier.add(EventB()),
 ///  expect: () => [isA<StateB>()],
 /// );
 /// ```
 @isTest
 void stateNotifierTest<SN extends StateNotifier<State>, State>(
   String description, {
-  required FutureOr Function(SN stateNotifier) actions,
+  required FutureOr Function(SN stateNotifier) actionions,
   FutureOr<void> Function()? setUp,
   FutureOr<void> Function(SN stateNotifier)? verify,
   FutureOr<void> Function()? tearDown,
@@ -122,7 +122,7 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
       await testNotifier<SN, State>(
         setUp: setUp,
         build: build,
-        actions: actions,
+        actionions: actionions,
         expect: expect,
         skip: skip,
         verify: verify,
@@ -137,7 +137,7 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
 /// This should never be used directly -- please use [stateNotifierTest] instead.
 @visibleForTesting
 Future<void> testNotifier<SN extends StateNotifier<State>, State>({
-  required FutureOr Function(SN stateNotifier) actions,
+  required FutureOr Function(SN stateNotifier) actionions,
   required List<State> Function() expect,
   required SN Function() build,
   State Function()? seed,
@@ -165,7 +165,7 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   }
 
   try {
-    await actions.call(stateNotifier);
+    await actionions.call(stateNotifier);
   } catch (error) {
     if (errors == null) rethrow;
     unhandledErrors.add(error);
@@ -179,7 +179,7 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   try {
     test.expect(states, test.wrapMatcher(expected));
   } on test.TestFailure catch (e) {
-    final diff = _diff(expected: expected, actual: states);
+    final diff = _diff(expected: expected, actionual: states);
     final message = '${e.message}\n$diff';
     // ignore: only_throw_errors
     throw test.TestFailure(message);
@@ -188,9 +188,9 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   await tearDown?.call();
 }
 
-String _diff({required dynamic expected, required dynamic actual}) {
+String _diff({required dynamic expected, required dynamic actionual}) {
   final buffer = StringBuffer();
-  final differences = diff(expected.toString(), actual.toString());
+  final differences = diff(expected.toString(), actionual.toString());
   buffer
     ..writeln('${"=" * 4} diff ${"=" * 40}')
     ..writeln()
