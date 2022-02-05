@@ -18,8 +18,7 @@ Add to dev dependencies inside pubspec_yaml:
 ```yaml
     dev_dependencies:
         state_notifier_test: [version]
-);
- ```
+```
 
 ## Usage
 
@@ -30,7 +29,7 @@ stateNotifierTest(
   'CounterNotifier emits [10] when seeded with 9',
   build: () => CounterNotifier(),
   seed: () => 9,
-  action: (stateNotifier) => stateNotifier.increment(),
+  actions: (stateNotifier) => stateNotifier.increment(),
   expect: () => [10],
 );
 
@@ -51,7 +50,7 @@ before asserting against the expected states.
 stateNotifierTest(
   'CounterNotifier emits [2] when increment is called twice',
   build: () => CounterNotifier(),
-  action: (stateNotifier) {
+  actions: (stateNotifier) {
     stateNotifier
       ..increment()
       ..increment();
@@ -67,7 +66,7 @@ stateNotifierTest(
 stateNotifierTest(
   'CounterNotifier emits [1] when increment is called',
   build: () => CounterNotifier(),
-  action: (stateNotifier) => stateNotifier.increment(),
+  actions: (stateNotifier) => stateNotifier.increment(),
   expect: () => [1],
   verify: (_) {
     verify(() => repository.someMethod(any())).called(1);
@@ -85,23 +84,23 @@ stateNotifierTest(
  `build` should construct and return the `stateNotifier` under test.
 
  `seed` is an optional `Function` that returns a state
- which will be used to seed the `stateNotifier` before `action` is called.
+ which will be used to seed the `stateNotifier` before `actions` is called.
 
- `action` is an optional callback which will be invoked with the `stateNotifier` under
- test and should be used to interaction with the `stateNotifier`.
+ `actions` is an optional callback which will be invoked with the `stateNotifier` under
+ test and should be used to interactions with the `stateNotifier`.
 
  `skip` is an optional `int` which can be used to skip any number of states.
  `skip` defaults to 0.
 
  `expect` is an optional `Function` that returns a `Matcher` which the `stateNotifier`
- under test is expected to emit after `action` is executed.
+ under test is expected to emit after `actions` is executed.
 
  `verify` is an optional callback which is invoked after `expect`
  and can be used for additional verification/assertions.
  `verify` is called with the `stateNotifier` returned by `build`.
 
  `errors` is an optional `Function` that returns a `Matcher` which the `stateNotifier`
- under test is expected to throw after `action` is executed.
+ under test is expected to throw after `actions` is executed.
 
  `tearDown` is optional and can be used to
  execute any code after the test has run.
