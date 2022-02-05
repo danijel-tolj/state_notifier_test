@@ -103,7 +103,7 @@ import 'package:state_notifier/state_notifier.dart';
 @isTest
 void stateNotifierTest<SN extends StateNotifier<State>, State>(
   String description, {
-  required FutureOr Function(SN stateNotifier) actionions,
+  required FutureOr Function(SN stateNotifier) actions,
   FutureOr<void> Function()? setUp,
   FutureOr<void> Function(SN stateNotifier)? verify,
   FutureOr<void> Function()? tearDown,
@@ -119,7 +119,7 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
       await testNotifier<SN, State>(
         setUp: setUp,
         build: build,
-        actionions: actionions,
+        actions: actions,
         expect: expect,
         skip: skip,
         verify: verify,
@@ -134,7 +134,7 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
 /// This should never be used directly -- please use [stateNotifierTest] instead.
 @visibleForTesting
 Future<void> testNotifier<SN extends StateNotifier<State>, State>({
-  required FutureOr Function(SN stateNotifier) actionions,
+  required FutureOr Function(SN stateNotifier) actions,
   required List<State> Function() expect,
   required SN Function() build,
   State Function()? seed,
@@ -162,7 +162,7 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   }
 
   try {
-    await actionions.call(stateNotifier);
+    await actions.call(stateNotifier);
   } catch (error) {
     if (errors == null) rethrow;
     unhandledErrors.add(error);
