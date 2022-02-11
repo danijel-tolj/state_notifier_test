@@ -147,7 +147,7 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   final unhandledErrors = <Object>[];
 
   await setUp?.call();
-  final states = <State>[];
+  List<State> states = <State>[];
   final stateNotifier = build();
 
   stateNotifier.addListener(
@@ -171,13 +171,13 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
 
   final expected = expect.call();
 
-  states.skip(skip);
+  states = states.skip(skip).toList();
 
   try {
     test.expect(states, test.wrapMatcher(expected));
     // ignore: nullable_type_in_catch_clause
   } on test.TestFailure catch (e) {
-    final diff = _diff(expected: expected, actionual: states);
+    final diff = _diff(expected: expected, actual: states);
     final message = '${e.message}\n$diff';
     // ignore: only_throw_errors
     throw test.TestFailure(message);
@@ -186,9 +186,9 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   await tearDown?.call();
 }
 
-String _diff({required dynamic expected, required dynamic actionual}) {
+String _diff({required dynamic expected, required dynamic actual}) {
   final buffer = StringBuffer();
-  final differences = diff(expected.toString(), actionual.toString());
+  final differences = diff(expected.toString(), actual.toString());
   buffer
     ..writeln('${"=" * 4} diff ${"=" * 40}')
     ..writeln()

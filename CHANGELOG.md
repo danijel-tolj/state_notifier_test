@@ -21,3 +21,9 @@
 ### Library changes
 
 #### Reverted test dependency to 1.16.0
+
+## 0.0.5
+
+### Fixes
+
+#### Fixed `skip` option 

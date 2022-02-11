@@ -2,7 +2,7 @@ name: state_notifier_test
 repository: https://github.com/danijel-tolj/state_notifier_test
 description: A testing library which makes it easy to test StateNotifier. Built
   to be used with the state_notifier, riverpod or flutter_riverpod packages.
-version: 0.0.4
+version: 0.0.5
 # homepage: https://www.example.com
 environment:
   sdk: '>=2.12.0 <3.0.0'
