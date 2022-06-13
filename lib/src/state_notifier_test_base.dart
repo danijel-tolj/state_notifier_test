@@ -125,6 +125,7 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
         verify: verify,
         errors: errors,
         tearDown: tearDown,
+        seed:seed
       );
     },
   );
