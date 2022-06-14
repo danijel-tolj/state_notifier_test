@@ -117,16 +117,15 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
     description,
     () async {
       await testNotifier<SN, State>(
-        setUp: setUp,
-        build: build,
-        actions: actions,
-        expect: expect,
-        skip: skip,
-        verify: verify,
-        errors: errors,
-        tearDown: tearDown,
-        seed:seed
-      );
+          setUp: setUp,
+          build: build,
+          actions: actions,
+          expect: expect,
+          skip: skip,
+          verify: verify,
+          errors: errors,
+          tearDown: tearDown,
+          seed: seed);
     },
   );
 }

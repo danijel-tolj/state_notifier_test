@@ -27,3 +27,15 @@
 ### Fixes
 
 #### Fixed `skip` option 
+
+## 0.0.6
+
+### Fixes
+
+#### Fixed `seed` option 
+
+## 0.0.7
+
+### Code changes
+
+#### Formatted files 
