@@ -18,6 +18,11 @@ import 'package:state_notifier/state_notifier.dart';
 ///
 /// [build] should construct and return the `stateNotifier` under test.
 ///
+/// [ignoreBuildCalls] is a `bool` which can be used to add a short time delay if
+/// `stateNotifier` constructor within build method will call additional methods
+/// that could interfere with the states being listened to in the test
+/// [ignoreBuildCalls] defaults to false.
+///
 /// [seed] is an optional `Function` that returns a state
 /// which will be used to seed the `stateNotifier` before [action] is called.
 ///
@@ -111,6 +116,7 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
   State Function()? seed,
   int skip = 0,
   required SN Function() build,
+  bool ignoreBuildCalls = false,
   dynamic Function()? errors,
 }) {
   test.test(
@@ -125,7 +131,8 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
           verify: verify,
           errors: errors,
           tearDown: tearDown,
-          seed: seed);
+          seed: seed,
+          ignoreBuildCalls: ignoreBuildCalls);
     },
   );
 }
@@ -143,12 +150,16 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   dynamic Function()? errors,
   FutureOr<void> Function()? setUp,
   required int skip,
+  required bool ignoreBuildCalls,
 }) async {
   final unhandledErrors = <Object>[];
 
   await setUp?.call();
   List<State> states = <State>[];
   final stateNotifier = build();
+  if (ignoreBuildCalls) {
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
 
   stateNotifier.addListener(
     (state) {

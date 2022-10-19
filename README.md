@@ -87,6 +87,11 @@ stateNotifierTest(
 
  `build` should construct and return the `stateNotifier` under test.
 
+`ignoreBuildCalls` is a `bool` which can be used to add a short time delay if
+`stateNotifier` constructor within build method will call additional methods 
+that could interfere with the states being listened to in the test
+`ignoreBuildCalls` defaults to false.
+
  `seed` is an optional `Function` that returns a state
  which will be used to seed the `stateNotifier` before `actions` is called.
 
