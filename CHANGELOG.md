@@ -26,16 +26,30 @@
 
 ### Fixes
 
-#### Fixed `skip` option 
+#### Fixed `skip` option
 
 ## 0.0.6
 
 ### Fixes
 
-#### Fixed `seed` option 
+#### Fixed `seed` option
 
 ## 0.0.7
 
 ### Code changes
 
-#### Formatted files 
+#### Formatted files
+
+## 0.0.8
+
+### Code changes
+
+#### Fixed seed bug
+
+#### BREAKING: seed parameter now expects a function that returns an array
+
+## 0.0.9
+
+### Code changes
+
+#### Added expectInitialState parameter

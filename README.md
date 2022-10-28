@@ -1,14 +1,14 @@
-<!-- 
+<!--
 This README describes the package. If you publish this package to pub.dev,
 this README's contents appear on the landing page for your package.
 
 For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
 
 For general information about developing packages, see the Dart guide for
 [creating packages](https://dart.dev/guides/libraries/create-library-packages)
 and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
+[developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
 ## Package
@@ -20,8 +20,8 @@ Package is a port of `felangel`'s `bloc_test`, modified to work with StateNotifi
 Add to dev dependencies inside pubspec_yaml:
 
 ```yaml
-    dev_dependencies:
-        state_notifier_test: [version]
+dev_dependencies:
+  state_notifier_test: [version]
 ```
 
 ## Usage
@@ -30,11 +30,11 @@ Add to dev dependencies inside pubspec_yaml:
 import 'package:state_notifier_test.dart';
 
 stateNotifierTest(
-  'CounterNotifier emits [10] when seeded with 9',
+  'CounterNotifier emits [9,10] when seeded with 9',
   build: () => CounterNotifier(),
-  seed: () => 9,
+  seed: () => [9],
   actions: (stateNotifier) => stateNotifier.increment(),
-  expect: () => [10],
+  expect: () => [9,10],
 );
 
 class CounterStateNotifier extends StateNotifier<int> {
@@ -76,38 +76,42 @@ stateNotifierTest(
     verify(() => repository.someMethod(any())).called(1);
   }
 );
- ```
-
+```
 
 ## Testing Options
- `setUp` is optional and should be used to set up
- any dependencies prior to initializing the `stateNotifier` under test.
- `setUp` should be used to set up state necessary for a particular test case.
- For common set up code, prefer to use `setUp` from `package:test/test.dart`.
 
- `build` should construct and return the `stateNotifier` under test.
+`setUp` is optional and should be used to set up
+any dependencies prior to initializing the `stateNotifier` under test.
+`setUp` should be used to set up state necessary for a particular test case.
+For common set up code, prefer to use `setUp` from `package:test/test.dart`.
 
- `seed` is an optional `Function` that returns a state
- which will be used to seed the `stateNotifier` before `actions` is called.
+`build` should construct and return the `stateNotifier` under test.
 
- `actions` is an optional callback which will be invoked with the `stateNotifier` under
- test and should be used to interactions with the `stateNotifier`.
+`seed` is an optional `Function` that returns an Iterable of States
+which will be used to seed the `stateNotifier` before `actions` is called.
 
- `skip` is an optional `int` which can be used to skip any number of states.
- `skip` defaults to 0.
+`actions` is an optional callback which will be invoked with the `stateNotifier` under
+test and should be used to interactions with the `stateNotifier`.
 
- `expect` is an optional `Function` that returns a `Matcher` which the `stateNotifier`
- under test is expected to emit after `actions` is executed.
+`skip` is an optional `int` which can be used to skip any number of states.
+`skip` defaults to 0.
 
- `verify` is an optional callback which is invoked after `expect`
- and can be used for additional verification/assertions.
- `verify` is called with the `stateNotifier` returned by `build`.
+`expect` is an optional `Function` that returns a `Matcher` which the `stateNotifier`
+under test is expected to emit after `actions` is executed.
 
- `errors` is an optional `Function` that returns a `Matcher` which the `stateNotifier`
- under test is expected to throw after `actions` is executed.
+`verify` is an optional callback which is invoked after `expect`
+and can be used for additional verification/assertions.
+`verify` is called with the `stateNotifier` returned by `build`.
 
- `tearDown` is optional and can be used to
- execute any code after the test has run.
- `tearDown` should be used to clean up after a particular test case.
- For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
+`errors` is an optional `Function` that returns a `Matcher` which the `stateNotifier`
+under test is expected to throw after `actions` is executed.
 
+`tearDown` is optional and can be used to
+execute any code after the test has run.
+`tearDown` should be used to clean up after a particular test case.
+For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
+
+`expectInitialState` is an optional `bool`.If set to true, the initial state from the constructor will also be checked.
+Useful when you want to validate the initial state.
+Note: if set to `true`, it will only catch the last assigned state in the constructor.
+`expectInitialState` defaults to `false`.

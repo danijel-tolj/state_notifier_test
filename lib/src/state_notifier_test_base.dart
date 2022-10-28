@@ -18,7 +18,7 @@ import 'package:state_notifier/state_notifier.dart';
 ///
 /// [build] should construct and return the `stateNotifier` under test.
 ///
-/// [seed] is an optional `Function` that returns a state
+/// [seed] is an optional `Function` that returns an Iterable of States
 /// which will be used to seed the `stateNotifier` before [action] is called.
 ///
 /// [action] is an optional callback which will be invoked with the `stateNotifier` under
@@ -26,6 +26,12 @@ import 'package:state_notifier/state_notifier.dart';
 ///
 /// [skip] is an optional `int` which can be used to skip any number of states.
 /// [skip] defaults to 0.
+///
+///
+/// [expectInitialState] is an optional `bool`.If set to true, the initial state from the constructor will also be checked.
+/// Useful when you want to validate the initial state.
+/// Note: if set to `true`, it will only catch the last assigned state in the constructor.
+/// [expectInitialState] defaults to `false`.
 ///
 /// [expect] is an optional `Function` that returns a `Matcher` which the `stateNotifier`
 /// under test is expected to emit after [action] is executed.
@@ -44,15 +50,15 @@ import 'package:state_notifier/state_notifier.dart';
 ///
 /// ```
 ///
-/// [stateNotifierTest] can optionally be used with a seeded state.
+/// [stateNotifierTest] can optionally be used with one or more seeded states.
 ///
 /// ```dart
 /// stateNotifierTest(
-///   'CounterNotifier emits [10] when seeded with 9',
+///   'CounterNotifier emits [9,10] when seeded with 9',
 ///   build: () => CounterNotifier(),
-///   seed: () => 9,
+///   seed: () => [9],
 ///   action: (stateNotifier) => stateNotifier.increment(),
-///   expect: () => [10],
+///   expect: () => [9,10],
 /// );
 /// ```
 ///
@@ -108,24 +114,27 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
   FutureOr<void> Function(SN stateNotifier)? verify,
   FutureOr<void> Function()? tearDown,
   required List<State> Function() expect,
-  State Function()? seed,
+  Iterable<State> Function()? seed,
   int skip = 0,
   required SN Function() build,
   dynamic Function()? errors,
+  bool expectInitialState = false,
 }) {
   test.test(
     description,
     () async {
       await testNotifier<SN, State>(
-          setUp: setUp,
-          build: build,
-          actions: actions,
-          expect: expect,
-          skip: skip,
-          verify: verify,
-          errors: errors,
-          tearDown: tearDown,
-          seed: seed);
+        setUp: setUp,
+        build: build,
+        actions: actions,
+        expect: expect,
+        skip: skip,
+        verify: verify,
+        errors: errors,
+        tearDown: tearDown,
+        seed: seed,
+        expectInitialState: expectInitialState,
+      );
     },
   );
 }
@@ -137,12 +146,13 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   required FutureOr Function(SN stateNotifier) actions,
   required List<State> Function() expect,
   required SN Function() build,
-  State Function()? seed,
+  Iterable<State> Function()? seed,
   FutureOr<void> Function(SN stateNotifier)? verify,
   FutureOr<void> Function()? tearDown,
   dynamic Function()? errors,
   FutureOr<void> Function()? setUp,
   required int skip,
+  bool expectInitialState = false,
 }) async {
   final unhandledErrors = <Object>[];
 
@@ -154,11 +164,15 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
     (state) {
       states.add(state);
     },
-    fireImmediately: false,
+    fireImmediately: expectInitialState,
   );
 
   if (seed != null) {
-    states.add(seed.call());
+    final seedStates = seed.call();
+    for (var state in seedStates) {
+      // ignore: invalid_use_of_protected_member
+      stateNotifier.state = state;
+    }
   }
 
   try {
