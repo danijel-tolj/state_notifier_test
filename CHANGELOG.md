@@ -53,3 +53,13 @@
 ### Code changes
 
 #### Added expectInitialState parameter
+
+## 0.0.10
+
+### Code changes
+
+#### added support for Dart 3.0
+
+#### expect is now optional
+
+#### expect can accept test matchers 

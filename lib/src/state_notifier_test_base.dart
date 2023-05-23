@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:diff_match_patch/diff_match_patch.dart';
-import 'package:test/test.dart' as test;
 import 'package:meta/meta.dart';
 import 'package:state_notifier/state_notifier.dart';
+import 'package:test/test.dart' as test;
 
 /// Creates a new `stateNotifier`-specific test case with the given [description].
 /// [stateNotifierTest] will handle asserting that the `stateNotifier` emits the [expect]ed
@@ -113,7 +113,7 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
   FutureOr<void> Function()? setUp,
   FutureOr<void> Function(SN stateNotifier)? verify,
   FutureOr<void> Function()? tearDown,
-  required List<State> Function() expect,
+  dynamic Function()? expect,
   Iterable<State> Function()? seed,
   int skip = 0,
   required SN Function() build,
@@ -144,7 +144,7 @@ void stateNotifierTest<SN extends StateNotifier<State>, State>(
 @visibleForTesting
 Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   required FutureOr Function(SN stateNotifier) actions,
-  required List<State> Function() expect,
+  dynamic Function()? expect,
   required SN Function() build,
   Iterable<State> Function()? seed,
   FutureOr<void> Function(SN stateNotifier)? verify,
@@ -183,12 +183,14 @@ Future<void> testNotifier<SN extends StateNotifier<State>, State>({
   }
   stateNotifier.dispose();
 
-  final expected = expect.call();
-
   states = states.skip(skip).toList();
 
+  final expected = expect?.call();
+
   try {
-    test.expect(states, test.wrapMatcher(expected));
+    if (expect != null) {
+      test.expect(states, test.wrapMatcher(expected));
+    }
     // ignore: nullable_type_in_catch_clause
   } on test.TestFailure catch (e) {
     final diff = _diff(expected: expected, actual: states);
